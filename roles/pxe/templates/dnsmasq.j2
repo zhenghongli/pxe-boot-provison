@@ -1,0 +1,44 @@
+# Interface settings
+interface={{ interface }}
+bind-interfaces
+
+# DHCP range settings
+dhcp-range={{ dhcp_range_start }},{{ dhcp_range_end }}
+
+# TFTP settings
+enable-tftp
+tftp-root={{ tftp_root }}
+
+# Logging settings
+log-queries
+log-dhcp
+log-facility={{ log_file }}
+
+# DHCP Match settings
+dhcp-match=set:biox,option:client-arch,0
+dhcp-match=set:BC_EFI,option:client-arch,7
+
+# PXE Boot settings
+pxe-service=tag:biox, "Legacy BIOS PXE", {{ pxe_bios }}
+pxe-service=tag:BC_EFI,BC_EFI, "UEFI PXE", {{ pxe_uefi }}
+
+# DHCP Boot settings
+dhcp-boot=tag:BC_EFI, {{ dhcp_boot_uefi }},,{{ tftp_server }}
+dhcp-boot=tag:bios, {{ dhcp_boot_bios }},,{{ tftp_server }}
+
+# Listening settings
+listen-address={{ listen_address }}
+
+# DHCP Options
+dhcp-option=66,{{ dhcp_option_66 }}
+dhcp-option=6,{{ dhcp_option_6_1 }},{{ dhcp_option_6_2 }}
+dhcp-option=3,{{ dhcp_option_3 }}
+
+# DNS Server settings
+server={{ dns_server_1 }}
+server={{ dns_server_2 }}
+
+# DHCP Host Entries
+{% for host in dhcp_hosts %}
+dhcp-host={{ host.mac_address }},{{ host.ip_address }},{{ host.hostname }},{{ host.lease_time }}
+{% endfor %}

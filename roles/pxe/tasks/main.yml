@@ -1,0 +1,149 @@
+---
+- name: Install dnsmasq package
+  apt:
+    name: dnsmasq
+    state: present
+    update_cache: yes
+
+- name: Replace the commented conf-dir line in the dnsmasq config file
+  ansible.builtin.replace:
+    path: /etc/dnsmasq.conf  # Change this to your file path
+    regexp: '^#conf-dir=/e
+  tc/dnsmasq.d'
+    replace: 'conf-dir=/etc/dnsmasq.d'
+
+- name: Create dnsmasq configuration directory
+  file:
+    path: /etc/dnsmasq.d/
+    state: directory
+    mode: '0755'
+
+- name: Generate dnsmasq configuration file
+  template:
+    src: "{{ role_path }}/templates/dnsmasq.j2"
+    dest: /etc/dnsmasq.d/pxe.conf  # This will place the config file in the new directory
+
+- name: Ensure /srv/tftp/bios/pxelinux.cfg directory exists
+  ansible.builtin.file:
+    path: /srv/tftp/bios/pxelinux.cfg
+    state: directory
+    mode: '0755'
+
+- name: Ensure /srv/tftp/efi directory exists
+  ansible.builtin.file:
+    path: /srv/tftp/efi
+    state: directory
+    mode: '0755'
+
+- name: Ensure /srv/tftp/grub directory exists
+  ansible.builtin.file:
+    path: /srv/tftp/grub
+    state: directory
+    mode: '0755'
+
+- name: Create pxelinux.cfg for each BIOS MAC address
+  copy:
+    content: |
+      DEFAULT vesamenu.c32
+      TIMEOUT 600
+      ONTIMEOUT focal-live-install-autoinstall
+      PROMPT 0
+
+      NOESCAPE 1
+
+      LABEL focal-live-install-autoinstall
+              MENU DEFAULT
+              MENU label Install focal - autoinstall
+              KERNEL vmlinuz
+              INITRD initrd
+              APPEND root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://192.168.144.3/iso/ubuntu-22.04.5-live-server-amd64.iso autoinstall ds=nocloud-net;s=http://192.168.144.3/cloud-init/bios/{{ item.mac_address | replace(':', '-') }} cloud-config-url=/dev/null
+    dest: "/srv/tftp/bios/pxelinux.cfg/01-{{ item.mac_address | replace(':', '-') }}"
+    mode: '0644'
+  when: item.type == 'bios'
+  loop: "{{ dhcp_hosts }}"
+
+- name: Create grub.cfg
+  copy:
+    content: |
+      configfile=/grub/grub.cfg-01-$net_default_mac
+      source "$configfile"
+    dest: "/srv/tftp/grub/grub.cfg"
+    mode: '0644'
+
+- name: Create grub.cfg for each UEFI MAC address
+  copy:
+    content: |
+      set timeout=5
+      menuentry "Ubuntu Linux 22.04 auto install"{
+          linux efi/vmlinuz root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://192.168.144.3/iso/ubuntu-22.04.5-live-server-amd64.iso autoinstall ds=nocloud-net\;s=http://192.168.144.3/cloud-init/uefi/{{ item.mac_address | replace(':', '-') }} cloud-config-url=/dev/null
+          initrd efi/initrd
+      }
+    dest: "/srv/tftp/grub/grub.cfg-01-{{ item.mac_address }}"
+    mode: '0644'
+  when: item.type == 'uefi'
+  loop: "{{ dhcp_hosts }}"
+
+- name: Install NFS client package
+  package:
+    name: nfs-common  # for Debian/Ubuntu; use "nfs-utils" for RHEL/CentOS
+    state: present
+
+- name: Create mount point directory
+  file:
+    path: "{{ mount_point }}"
+    state: directory
+    mode: '0755'
+
+- name: Mount an NFS volume
+  ansible.posix.mount:
+    src: "{{ nfs_server_ip }}:{{ nfs_share_path }}"
+    path: "{{ mount_point }}"
+    opts: rw,sync,hard
+    state: mounted
+    fstype: nfs
+
+- name: Create iso directory
+  file:
+    path: /var/www/html/iso/
+    state: directory
+    mode: '0755'
+
+- name: Copy the iso file to /var/www/html/iso
+  ansible.builtin.copy:
+    src: /mnt/pxe/iso/
+    dest: /var/www/html/iso/
+    remote_src: yes
+
+- name: Copy the entire nfs tftp directory to /srv/tftp/
+  ansible.builtin.copy:
+    src: /mnt/pxe/tftp/
+    dest: /srv/tftp/
+    remote_src: yes
+
+- name: Set permissions to 755 for /srv/tftp
+  ansible.builtin.file:
+    path: /srv/tftp
+    mode: '0755'
+    state: directory
+    recurse: yes
+
+- name: Stop and disable systemd-resolve
+  service:
+    name: systemd-resolved
+    state: stopped
+    enabled: no
+
+- name: Copy custom content to /etc/resolv.conf
+  ansible.builtin.copy:
+    content: |
+      nameserver 127.0.0.1
+      options enp1s0
+      search .
+    dest: /etc/resolv.conf
+    mode: '0644'
+
+- name: Restart dnsmasq service and make it enable
+  ansible.builtin.service:
+    name: dnsmasq
+    state: restarted
+    enabled: yes  # Ensure dnsmasq starts on boot

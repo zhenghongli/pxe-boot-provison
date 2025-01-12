@@ -1,0 +1,24 @@
+---
+hostname: ubuntu-server
+password: "$6$FhcddHFVZ7ABA4Gi$z2g1zrhdlUD9bEcT4KhGfvySJjfKE5ZEfGX5jj//t1ZQovRRssTDYrZMh69xnNs43Lp4yPsi6NaMDLZ9X1Xpj1"
+username: ubuntu
+keyboard_layout: us
+keyboard_variant: ""
+locale: en_US.UTF-8
+network_interface: enp1s0
+ssh_public_key: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC4AfEs01eaTKUdG+92iy/fTCvABLHwlekBvWyQHYjZFv9CEBrNyyqeT7odmBHuAPxPIWqtCiL0/11SSd/4/eOUTblWnXI8U+peVcf8dnvuBTWLPa1/eh3Iuqaje0co8DlKow2oIYswOvmPYbs1o8VVGy4/lzjzkRf+37lMCopFD0vaP++k0ld5hl8HHF6NwVYyI/GzKY8Z2hEkAQd9y4aC7j8TDat04s2O5JvR4tgP1ydS8lyAirAZ3T6D1SB2sHb7HZ3nRteYbce13uFvNWI64OvJobpY/Y3BLb1VALYOJkR6l+6Lm4y5ipJiVETtPPjhgQYN9TWS3O+JJGEiOXFlHWq1H10e1/4OvJXNkzDp5L0MiFSpBe+mN2WAwjMlGBbtBpq06lPu7BG9hCVDkHL6EU/JQtgDrQhxxSlsgxXiJxJOvJJZIm7+I5WeCsCEUGPRTV/8eBf3K8WBaxhCTSfjAOLx3drQE/1O8/uvExaNrMkIhhVh0X7kivPBI7aP0E8= root@headnode01"
+storage_device: /dev/vda
+
+cloud_init_structure:
+  - mac_address: "52:54:00:d0:27:22"
+    type: "uefi"
+  - mac_address: "52:54:00:d8:0f:f0"
+    type: "uefi"
+  - mac_address: "52:54:00:9d:45:c9"
+    type: "uefi"
+  - mac_address: "52:54:00:67:21:87"
+    type: "bios"
+  - mac_address: "52:54:00:eb:ba:4e"
+    type: "bios"
+  - mac_address: "defalt"
+    type: "default"

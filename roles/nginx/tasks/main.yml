@@ -1,0 +1,61 @@
+- name: Install Nginx package
+  apt:
+    name: nginx
+    state: present
+    update_cache: yes
+
+- name: Create cloud-init directory structure
+  file:
+    path: "/var/www/html/cloud-init/{{ item.type }}/{{ item.mac_address | replace(':', '-') }}"
+    state: directory
+    mode: "0755"
+  loop: "{{ cloud_init_structure }}"
+  loop_control:
+    loop_var: item
+
+# - name: Create meta-data file for {{ item.type }} - {{ item.mac_address }}
+  # template:
+  #   src: "templates/meta-data.j2"
+  #   dest: "/var/www/html/cloud-init/{{ item.type }}/{{ item.mac_address }}/meta-data"
+  # loop: "{{ cloud_init_structure }}"
+  # loop_control:
+  #   loop_var: item
+
+- name: Create user-data file for {{ item.type }} - {{ item.mac_address }}
+  template:
+    src: "templates/user-data.j2"
+    dest: "/var/www/html/cloud-init/{{ item.type }}/{{ item.mac_address | replace(':', '-') }}/user-data"
+  loop: "{{ cloud_init_structure }}"
+  loop_control:
+    loop_var: item
+
+- name: Copy Nginx configuration file using content
+  copy:
+    content: |
+      server {
+          listen 80;
+          server_name _;
+
+          root /var/www/html;
+          index index.html;
+
+          location / {
+              try_files $uri $uri/ =404;
+          }
+
+          location /cloud-init/ {
+              autoindex on;
+          }
+
+          location /iso/ {
+              autoindex on;
+          }
+      }
+    dest: /etc/nginx/sites-available/file_server
+    mode: '0644'
+
+- name: Enable and restart Nginx
+  service:
+    name: nginx
+    state: restarted
+    enabled: yes
