@@ -11,14 +11,132 @@ storage_device: /dev/vda
 
 cloud_init_structure:
   - mac_address: "52:54:00:d0:27:22"
+    instance_id: Mike-uefi-ubuntu-server01
+    local_hostname: ubuntu-server
     type: "uefi"
   - mac_address: "52:54:00:d8:0f:f0"
+    instance_id: Mike-uefi-ubuntu-server02
+    local_hostname: ubuntu-server
     type: "uefi"
   - mac_address: "52:54:00:9d:45:c9"
+    instance_id: Mike-uefi-ubuntu-server03
+    local_hostname: ubuntu-server
     type: "uefi"
-  - mac_address: "52:54:00:67:21:87"
-    type: "bios"
+  - mac_address: "52:54:00:b9:5c:93"
+    instance_id: Mike-DNS
+    local_hostname: ubuntu-server
+    type: "uefi"
+  - mac_address: "52:54:00:63:3b:c1"
+    instance_id: Mike-gitlab
+    local_hostname: ubuntu-server
+    type: "uefi"
+  - mac_address: "52:54:00:c7:f5:02"
+    instance_id: Mike-kubernetes-master01
+    local_hostname: ubuntu-server
+    type: "uefi"
+  - mac_address: "52:54:00:cf:51:62"
+    instance_id: Mike-kubernetes-master02
+    local_hostname: ubuntu-server
+    type: "uefi"
+  - mac_address: "52:54:00:00:95:9e"
+    instance_id: Mike-kubernetes-master03
+    local_hostname: ubuntu-server
+    type: "uefi"
+  - mac_address: "52:54:00:1b:3b:56"
+    instance_id: Mike-kubernetes-worker01
+    local_hostname: ubuntu-server
+    type: "uefi"
+  - mac_address: "52:54:00:80:10:03"
+    instance_id: Mike-kubernetes-worker02
+    local_hostname: ubuntu-server
+    type: "uefi"
+  - mac_address: "52:54:00:0a:bb:a9"
+    instance_id: "Mike-redis1-node1"
+    local_hostname: redis1-node1
+    type: "uefi"
+  - mac_address: "52:54:00:6a:f6:e0"
+    instance_id: "Mike-redis1-node2"
+    local_hostname: redis1-node2
+    type: "uefi"
+  - mac_address: "52:54:00:98:af:2f"
+    instance_id: "Mike-redis1-node3"
+    local_hostname: redis1-node3
+    type: "uefi"
+  - mac_address: "52:54:00:3d:c9:9d"
+    instance_id: "Mike-redis2-node1"
+    local_hostname: redis2-node1
+    type: "uefi"
+  - mac_address: "52:54:00:86:3c:7b"
+    instance_id: "Mike-redis2-node2"
+    local_hostname: redis2-node2
+    type: "uefi"
+  - mac_address: "52:54:00:45:66:3b"
+    instance_id: "Mike-redis2-node3"
+    local_hostname: redis2-node3
+    type: "uefi"
+  - mac_address: "52:54:00:61:19:67"
+    instance_id: "Mike-postgresql1-node1"
+    local_hostname: postgresql1-node1
+    type: "uefi"
+  - mac_address: "52:54:00:54:60:f4"
+    instance_id: "Mike-postgresql1-node2"
+    local_hostname: postgresql1-node2
+    type: "uefi"
+  - mac_address: "52:54:00:61:4d:ff"
+    instance_id: "Mike-postgresql1-node3"
+    local_hostname: postgresql1-node3
+    type: "uefi"
+  - mac_address: "52:54:00:44:05:e9"
+    instance_id: "Mike-haproxy"
+    local_hostname: haproxy
+    type: "uefi"
+  - mac_address: "52:54:00:ae:c8:70"
+    instance_id: "Mike-postgresql1-etcd1"
+    local_hostname: postgresql1-etcd1
+    type: "uefi"
+  - mac_address: "52:54:00:fa:1e:d9"
+    instance_id: "Mike-postgresql1-etcd2"
+    local_hostname: postgresql1-etcd2
+    type: "uefi"
+  - mac_address: "52:54:00:93:0c:3a"
+    instance_id: "Mike-postgresql1-etcd3"
+    local_hostname: postgresql1-etcd3
+    type: "uefi"
+  - mac_address: "52:54:00:a7:07:e1"
+    instance_id: "Mike-harbor1"
+    local_hostname: harbor1
+    type: "uefi"
+  - mac_address: "52:54:00:0b:07:89"
+    instance_id: "Mike-harbor2"
+    local_hostname: harbor2
+    type: "uefi"
+  - mac_address: "52:54:00:c4:9f:ce"
+    instance_id: "Mike-ceph1"
+    local_hostname: "ceph1"
+    type: "uefi"
+  - mac_address: "52:54:00:43:09:8b"
+    instance_id: "Mike-ceph2"
+    local_hostname: "ceph2"
+    type: "uefi"
+  - mac_address: "52:54:00:3d:c3:26"
+    instance_id: "Mike-ceph3"
+    local_hostname: "ceph3"
+    type: "uefi"
+  - mac_address: "52:54:00:b1:67:1b"
+    instance_id: "Mike-MinIO"
+    local_hostname: "minion"
+    type: "uefi"
+  - mac_address: "52:54:00:09:12:84"
+    instance_id: "Mike-harbor-pull-test-node"
+    local_hostname: "harbor-pull-test-node"
+    type: "uefi"
+  - mac_address: "52:54:00:09:43:1f"
+    instance_id: "Mike-AWX"
+    local_hostname: "awx"
+    type: "uefi"
   - mac_address: "52:54:00:eb:ba:4e"
     type: "bios"
+    instance_id: Mike-ubuntu-server03
+    local_hostname: ubuntu-server
   - mac_address: "defalt"
     type: "default"

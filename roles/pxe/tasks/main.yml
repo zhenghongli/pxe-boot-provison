@@ -56,7 +56,7 @@
               MENU label Install focal - autoinstall
               KERNEL vmlinuz
               INITRD initrd
-              APPEND root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://192.168.144.3/iso/ubuntu-22.04.5-live-server-amd64.iso autoinstall ds=nocloud-net;s=http://192.168.144.3/cloud-init/bios/{{ item.mac_address | replace(':', '-') }} cloud-config-url=/dev/null
+              APPEND root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://192.168.144.3/iso/ubuntu-22.04.5-live-server-amd64.iso autoinstall ds=nocloud-net;s=http://192.168.144.3/cloud-init/bios/{{ item.mac_address | replace(':', '-') }}/ cloud-config-url=/dev/null
     dest: "/srv/tftp/bios/pxelinux.cfg/01-{{ item.mac_address | replace(':', '-') }}"
     mode: '0644'
   when: item.type == 'bios'
@@ -75,7 +75,7 @@
     content: |
       set timeout=5
       menuentry "Ubuntu Linux 22.04 auto install"{
-          linux efi/vmlinuz root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://192.168.144.3/iso/ubuntu-22.04.5-live-server-amd64.iso autoinstall ds=nocloud-net\;s=http://192.168.144.3/cloud-init/uefi/{{ item.mac_address | replace(':', '-') }} cloud-config-url=/dev/null
+          linux efi/vmlinuz root=/dev/ram0 ramdisk_size=1500000 ip=dhcp url=http://192.168.144.3/iso/ubuntu-22.04.5-live-server-amd64.iso autoinstall ds=nocloud-net\;s=http://192.168.144.3/cloud-init/uefi/{{ item.mac_address | replace(':', '-') }}/ cloud-config-url=/dev/null
           initrd efi/initrd
       }
     dest: "/srv/tftp/grub/grub.cfg-01-{{ item.mac_address }}"

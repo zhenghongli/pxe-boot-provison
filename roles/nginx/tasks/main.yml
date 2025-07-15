@@ -13,21 +13,48 @@
   loop_control:
     loop_var: item
 
-# - name: Create meta-data file for {{ item.type }} - {{ item.mac_address }}
-  # template:
-  #   src: "templates/meta-data.j2"
-  #   dest: "/var/www/html/cloud-init/{{ item.type }}/{{ item.mac_address }}/meta-data"
-  # loop: "{{ cloud_init_structure }}"
-  # loop_control:
-  #   loop_var: item
-
-- name: Create user-data file for {{ item.type }} - {{ item.mac_address }}
+- name: Create bios meta-data file for {{ item.type }} - {{ item.mac_address }}
   template:
-    src: "templates/user-data.j2"
+    src: "templates/bios/meta-data.j2"
+    dest: "/var/www/html/cloud-init/{{ item.type }}/{{ item.mac_address | replace(':', '-') }}/meta-data"
+  loop: "{{ cloud_init_structure }}"
+  loop_control:
+    loop_var: item
+  when: item.type == 'bios'
+
+- name: Create bios user-data file for {{ item.type }} - {{ item.mac_address }}
+  template:
+    src: "templates/bios/user-data.j2"
     dest: "/var/www/html/cloud-init/{{ item.type }}/{{ item.mac_address | replace(':', '-') }}/user-data"
   loop: "{{ cloud_init_structure }}"
   loop_control:
     loop_var: item
+  when: item.type == 'bios'
+
+- name: Create uefi meta-data file for {{ item.type }} - {{ item.mac_address }}
+  template:
+    src: "templates/uefi/meta-data.j2"
+    dest: "/var/www/html/cloud-init/{{ item.type }}/{{ item.mac_address | replace(':', '-') }}/meta-data"
+  loop: "{{ cloud_init_structure }}"
+  loop_control:
+    loop_var: item
+  when: item.type == 'uefi'
+
+- name: Create uefi user-data file for {{ item.type }} - {{ item.mac_address }}
+  template:
+    src: "templates/uefi/user-data.j2"
+    dest: "/var/www/html/cloud-init/{{ item.type }}/{{ item.mac_address | replace(':', '-') }}/user-data"
+  loop: "{{ cloud_init_structure }}"
+  loop_control:
+    loop_var: item
+  when: item.type == 'uefi'
+
+- name: Change http file permission
+  file:
+    path: /var/www/html/
+    state: directory
+    mode: '0755'
+    recurse: yes
 
 - name: Copy Nginx configuration file using content
   copy:
