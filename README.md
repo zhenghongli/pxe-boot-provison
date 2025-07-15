@@ -9,7 +9,7 @@ Prerequsite:
 1. Install Ansible, NFS.
 1. Clone this repository.
 3. Prepare ISO and bootloader file then place them on the NFS server. Ensure folder sturcture follows the exmaple provided in documentation. 
-[How to download files](https://gmicloud.atlassian.net/wiki/pages/resumedraft.action?draftId=47055061&draftShareId=e77ffa06-b633-46ab-9624-df9084f4c387).
+[How to download files](https://hackmd.io/@LJlHdtK5RuqEvb56diBuvw/ryMiKYXUlx).
 
 exmaple:
 
